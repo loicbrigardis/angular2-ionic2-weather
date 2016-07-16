@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {NavController} from 'ionic-angular';
 import {WeatherService} from '../../services/weather.services';
+import {Storage, LocalStorage} from 'ionic-angular';
 
 @Component({
     templateUrl: 'build/pages/weather/weather.html',
@@ -8,12 +9,12 @@ import {WeatherService} from '../../services/weather.services';
 })
 export class WeatherPage implements OnInit {
 
-    city = 'Boston';
-    state = 'MA'
-    weather;
-    searchStr;
-    results;
-    zmw;
+    private weather;
+    private searchStr;
+    private results;
+    private zmw;
+    private cityLocalStorage;
+    private selectedCity;
 
     constructor(
         private navController: NavController,
@@ -21,6 +22,7 @@ export class WeatherPage implements OnInit {
     ) { }
 
     ngOnInit() {
+        this.cityLocalStorage = new Storage(LocalStorage);
         this.getDefaultCity();
         this._weatherService.getWeather(this.zmw)
             .subscribe(data => {
@@ -32,20 +34,27 @@ export class WeatherPage implements OnInit {
         this._weatherService.searchCity(this.searchStr)
             .subscribe(res => {
                 this.results = res.RESULTS;
-                console.log(res.RESULTS);
             });
     }
 
     chooseCity(city) {
         this.results = [];
         this._weatherService.getWeather(city.zmw)
-            .subscribe(data => {
+            .subscribe(data => {              
                 this.weather = data.current_observation;
             });
     }
 
     getDefaultCity() {
-        this.zmw = '02101.1.99999'
+        if (typeof (localStorage) !== 'undefined') {
+            this.selectedCity = this.cityLocalStorage.get('city').__zone_symbol__value;
+            this.zmw = JSON.parse(this.selectedCity).zmw;
+        }else {
+            this.zmw = "00000.37.07156";
+        }
+
+
+        
     }
 
 }
