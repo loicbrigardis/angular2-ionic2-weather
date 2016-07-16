@@ -1,4 +1,15 @@
 .weather {
     background: #333b5b;
     color: #fff; 
+    font-size: 1.3em;
+}
+
+.location, .icon, .desc {
+    text-align: center;
+}
+
+.temp {
+    text-align: center;
+    font-size: 1.6em;
+    font-weight: normal;
 }
