@@ -11,6 +11,8 @@ export class WeatherPage implements OnInit {
     city = 'Boston';
     state = 'MA'
     weather;
+    searchStr;
+    results;
     
     constructor(
         private navController: NavController,
@@ -19,11 +21,19 @@ export class WeatherPage implements OnInit {
 
     ngOnInit() { 
         this._weatherService.getWeather(this.city, this.state)
-        .subscribe(w => {
-            console.log(w);
-            this.weather = w;
+        .subscribe(data => {
+            console.log(data);
+            this.weather = data.current_observation;
         });
-        
+    }
+
+    getQuery () {
+        this._weatherService.searchCity(this.searchStr)
+        .subscribe(res => {
+            
+            this.results = res.RESULTS;
+            console.log(this.results);
+        });
     }
 
 }
