@@ -14,8 +14,8 @@ export class WeatherService {
     constructor(private _http: Http) {
     }
 
-    getWeather(city, state) {
-        return this._http.get(this._apiUrl + state + '/' + city + '.json')
+    getWeather(zmw) {
+        return this._http.get(this._apiUrl+ '/zmw:' + zmw + '.json')
             .map(x => x.json());
     }
 
